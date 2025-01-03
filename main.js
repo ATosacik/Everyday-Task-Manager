@@ -22,16 +22,24 @@ const resetTasksForNewDay = () => {
     const tasks = [];
     document.querySelectorAll('.task').forEach(task => {
       const taskText = task.querySelector('span').innerText;
-      const isChecked = task.querySelector('.taskCompleteChb').checked;
-      tasks.push({ taskText, isChecked });
+      tasks.push({ taskText, isChecked: false }); // Mark all tasks as unchecked
     });
 
     if (tasks.length > 0) {
-      saveTasksToLocalStorage(tasks); // Save previous day's tasks
+      saveTasksToLocalStorage(tasks); // Save unchecked tasks to localStorage
     }
 
     localStorage.setItem('lastSavedDate', currentDate);
-    taskCon.innerHTML = ''; // Clear UI for new day
+    taskCon.innerHTML = ''; // Clear UI for the new day
+
+    // Reload tasks into the UI as unchecked
+    tasks.forEach(task => {
+      taskCon.innerHTML += `<div class="task">
+          <input class="taskRemoveChb" type="checkbox">
+          <input class="taskCompleteChb" type="checkbox">
+          <span>${task.taskText}</span>
+        </div>`;
+    });
   }
 };
 
@@ -44,13 +52,8 @@ const removeBtn = document.querySelector('#remove-btn');
 const acceptBtn = document.querySelector('#accept-btn');
 const taskCon = document.querySelector('#task-con');
 
-const hideTaskRemoveCheckboxes = () => document.querySelectorAll('.taskRemoveChb').forEach(checkbox => checkbox.style.display = "none");
-
-const showTaskRemoveCheckboxes = () => document.querySelectorAll('.taskRemoveChb').forEach(checkbox => checkbox.style.display = "inline-block");
-
 const addTask = () => {
   acceptBtn.style.display = "none";
-  hideTaskRemoveCheckboxes();
 
   const task = prompt("Write your task.");
   if (!task) return;
@@ -69,12 +72,12 @@ const addTask = () => {
 
 const removeTask = () => {
   acceptBtn.style.display = "inline-block";
-  showTaskRemoveCheckboxes();
+  document.querySelectorAll('.taskRemoveChb').forEach(checkbox => checkbox.style.display = "inline-block");
 };
 
 const acceptActions = () => {
   acceptBtn.style.display = "none";
-  hideTaskRemoveCheckboxes();
+  document.querySelectorAll('.taskRemoveChb').forEach(checkbox => checkbox.style.display = "none");
 
   document.querySelectorAll('.taskRemoveChb').forEach(checkbox => {
     if (checkbox.checked) {
