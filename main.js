@@ -17,16 +17,21 @@ const saveTasksToLocalStorage = (tasks) => {
 const resetTasksForNewDay = () => {
   const currentDate = getCurrentDate();
   const lastSavedDate = localStorage.getItem('lastSavedDate');
+
   if (lastSavedDate !== currentDate) {
-    const tasks = document.querySelectorAll('.task');
-    const taskData = [];
-    tasks.forEach(task => {
+    const tasks = [];
+    document.querySelectorAll('.task').forEach(task => {
       const taskText = task.querySelector('span').innerText;
       const isChecked = task.querySelector('.taskCompleteChb').checked;
-      taskData.push({ taskText, isChecked });
+      tasks.push({ taskText, isChecked });
     });
-    saveTasksToLocalStorage(taskData);
+
+    if (tasks.length > 0) {
+      saveTasksToLocalStorage(tasks); // Save previous day's tasks
+    }
+
     localStorage.setItem('lastSavedDate', currentDate);
+    taskCon.innerHTML = ''; // Clear UI for new day
   }
 };
 
@@ -38,8 +43,6 @@ const addBtn = document.querySelector('#add-btn');
 const removeBtn = document.querySelector('#remove-btn');
 const acceptBtn = document.querySelector('#accept-btn');
 const taskCon = document.querySelector('#task-con');
-const taskRemoveCheckboxes = document.querySelectorAll('.taskRemoveChb');
-const taskCompleteCheckboxes = document.querySelectorAll('.taskCompleteChb');
 
 const hideTaskRemoveCheckboxes = () => document.querySelectorAll('.taskRemoveChb').forEach(checkbox => checkbox.style.display = "none");
 
@@ -50,22 +53,18 @@ const addTask = () => {
   hideTaskRemoveCheckboxes();
 
   const task = prompt("Write your task.");
-  if (task == '' || task == undefined) return;
+  if (!task) return;
 
   const tasks = loadTasksFromLocalStorage();
   const newTask = { taskText: task, isChecked: false };
   tasks.push(newTask);
   saveTasksToLocalStorage(tasks);
 
-  // Append new task without modifying the state of existing ones
-  const taskDiv = document.createElement('div');
-  taskDiv.classList.add('task');
-  taskDiv.innerHTML = `
-    <input class="taskRemoveChb" type="checkbox">
-    <input class="taskCompleteChb" type="checkbox" ${newTask.isChecked ? 'checked' : ''}>
-    <span>${task}</span>
-  `;
-  taskCon.appendChild(taskDiv);
+  taskCon.innerHTML += `<div class="task">
+          <input class="taskRemoveChb" type="checkbox">
+          <input class="taskCompleteChb" type="checkbox">
+          <span>${task}</span>
+        </div>`;
 };
 
 const removeTask = () => {
@@ -77,29 +76,20 @@ const acceptActions = () => {
   acceptBtn.style.display = "none";
   hideTaskRemoveCheckboxes();
 
-  const tasks = [];
-  document.querySelectorAll('.task').forEach(task => {
-    const taskText = task.querySelector('span').innerText;
-    const isChecked = task.querySelector('.taskCompleteChb').checked;
-    tasks.push({ taskText, isChecked });
-  });
-
-  saveTasksToLocalStorage(tasks);
-
   document.querySelectorAll('.taskRemoveChb').forEach(checkbox => {
     if (checkbox.checked) {
       const taskToRemove = checkbox.closest('.task');
+      const taskTextToRemove = taskToRemove.querySelector('span').innerText;
+
       taskToRemove.remove();
 
-      const taskTextToRemove = taskToRemove.querySelector('span').innerText;
-      const tasksInLocalStorage = loadTasksFromLocalStorage();
-      const updatedTasks = tasksInLocalStorage.filter(task => task.taskText !== taskTextToRemove);
+      const tasks = loadTasksFromLocalStorage();
+      const updatedTasks = tasks.filter(task => task.taskText !== taskTextToRemove);
       saveTasksToLocalStorage(updatedTasks);
     }
   });
 };
 
-// Event listener for checkbox state change
 document.addEventListener('change', (event) => {
   if (event.target.classList.contains('taskCompleteChb')) {
     const taskText = event.target.closest('.task').querySelector('span').innerText;
@@ -110,13 +100,13 @@ document.addEventListener('change', (event) => {
       task.taskText === taskText ? { taskText, isChecked } : task
     );
 
-    // Save updated tasks to local storage immediately after checkbox change
     saveTasksToLocalStorage(updatedTasks);
   }
 });
 
 window.addEventListener('load', () => {
   resetTasksForNewDay();
+
   const tasks = loadTasksFromLocalStorage();
   tasks.forEach(task => {
     taskCon.innerHTML += `<div class="task">
