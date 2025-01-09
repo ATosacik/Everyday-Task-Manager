@@ -11,12 +11,18 @@
 
 <body>
   <h1>Everyday-Task-Manager</h1>
-  <h3>Date: <span id="date-span"></span></h3>
-  <div>
-    <button id="add-btn">Add</button>
-    <button id="remove-btn">Remove</button>
-    <button id="accept-btn">Accept</button>
-    <button style="display: none;" id="view-btn">View tasks</button>
+  <div id="date-box">
+    <h3>Date: <span id="date-text"></span></h3>
+  </div>
+  <div id="primary-control-box">
+    <button id="add-task-btn">Add task</button>
+    <button id="edit-tasks-btn">Edit tasks</button>
+    <button id="view-tasks-btn">View tasks</button>
+  </div>
+  <div id="secondary-control-box" hidden>
+    <button id="toggle-select-btn">Toggle select</button>
+    <button id="remove-selected-btn">Remove selected</button>
+    <button id="save-changes-btn">Save changes</button>
   </div>
   <h2>Tasks:</h2>
   <div id="task-con">
