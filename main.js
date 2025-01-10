@@ -72,11 +72,12 @@ const viewTasks = () => {
 
   const ETMD = JSON.parse(localStorage.getItem('ETMD'));
 
-  ETMD.tasks.forEach(day, tasks => {
-    taskCon.innerHTML += '<h3>${day}</h3>';
-    
-  });
-
+  for (const day in ETMD.tasks) {
+    taskCon.innerHTML += `<h3>${day}</h3>`;
+    ETMD.tasks[day].forEach(task => {
+      taskCon.innerHTML += `<span>${task.isChecked ? '&#10004;' : '&#10008;'} ${task.taskText}</span><br>`;
+    });
+  }
 }
 
 // FUNCTIONS
