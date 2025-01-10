@@ -4,34 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Everyday-Task-Manager</title>
+  <!-- Title -->
+  <title>Everyday Task Manager</title>
+  <!-- Css -->
   <link rel="stylesheet" href="main.css">
+  <!-- Js -->
   <script defer src="main.js"></script>
 </head>
 
 <body>
-  <h1>Everyday-Task-Manager</h1>
-  <div id="date-box">
-    <h3>Date: <span id="date-text"></span></h3>
-  </div>
-  <div id="primary-control-box">
-    <button id="add-task-btn">Add task</button>
-    <button id="edit-tasks-btn">Edit tasks</button>
-    <button id="view-tasks-btn">View tasks</button>
-  </div>
-  <div>
-    <button id="go-back-btn" hidden>Back to task manager</button>
-  </div>
-  <div id="secondary-control-box" hidden>
-    <button id="toggle-select-btn">Toggle select</button>
-    <button id="remove-selected-btn">Remove selected</button>
-    <button id="save-changes-btn">Save changes</button>
-  </div>
-  <div id="task-text-box">
-    <h2>Tasks:</h2>
-  </div>
-  <div id="task-con">
-  </div>
+  <header>
+    <h1>Everyday Task Manager</h1>
+  </header>
+
+  <main>
+    <div id="date-box">
+      <h3>Date: <span id="date-text"></span></h3>
+    </div>
+
+    <div id="control-panel">
+      <div id="primary-control-box" class="">
+        <button id="add-task-btn" class="btn">Add Task</button>
+        <button id="edit-tasks-btn" class="btn">Edit Tasks</button>
+        <button id="view-tasks-btn" class="btn">View Tasks</button>
+      </div>
+
+      <div>
+        <button id="go-back-btn" class="btn" hidden>Back to Task Manager</button>
+      </div>
+
+      <div id="secondary-control-box" class="" hidden>
+        <button id="toggle-select-btn" class="btn">Toggle Select</button>
+        <button id="save-changes-btn" class="btn">Save Changes</button>
+      </div>
+    </div>
+
+    <div id="task-text-box">
+      <h2>Tasks:</h2>
+    </div>
+
+    <div id="task-con" class="task-container">
+      <!-- Tasks will appear here -->
+    </div>
+  </main>
 
 </body>
 
