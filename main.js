@@ -66,19 +66,27 @@ const updateIfTaskCompleteCheckboxChange = e => {
 
 const viewTasks = () => {
   primaryControlBox.hidden = true;
+  secondaryControlBox.hidden = true;
+  canEditTasks = false;
   taskTextBox.hidden = true;
   goBackBtn.hidden = false;
   taskCon.innerHTML = '';
 
   const ETMD = JSON.parse(localStorage.getItem('ETMD'));
 
-  for (const day in ETMD.tasks) {
-    taskCon.innerHTML += `<h3>${day}</h3>`;
-    ETMD.tasks[day].forEach(task => {
-      taskCon.innerHTML += `<span>${task.isChecked ? '&#10004;' : '&#10008;'} ${task.taskText}</span><br>`;
+  Object.keys(ETMD.tasks)
+    .sort((a, b) => new Date(b.split('-').reverse().join('-')) - new Date(a.split('-').reverse().join('-')))
+    .forEach(day => {
+      taskCon.innerHTML += `<h3>${day}</h3>`;
+      ETMD.tasks[day].forEach(task => {
+        taskCon.innerHTML += `
+          <div class="view-task">
+            <span>${task.isChecked ? '&#10004;' : '&#10008;'}</span>
+            <span>${task.taskText}</span>
+          </div>`;
+      });
     });
-  }
-}
+};
 
 // FUNCTIONS
 const resetTasksForNewDay = () => {
@@ -86,7 +94,7 @@ const resetTasksForNewDay = () => {
 
   if (ETMD && ETMD.lastSavedDate !== currentDate) {
     const lastDayTasks = ETMD.tasks[ETMD.lastSavedDate] || [];
-    const newTasks = lastDayTasks.map(task => ({taskText: task.taskText, isChecked: false}));
+    const newTasks = lastDayTasks.map(task => ({ taskText: task.taskText, isChecked: false }));
     ETMD.lastSavedDate = currentDate;
     ETMD.tasks[currentDate] = newTasks;
     localStorage.setItem('ETMD', JSON.stringify(ETMD));
@@ -163,8 +171,6 @@ const saveChanges = () => {
 
   canEditTasks = false;
   secondaryControlBox.hidden = !canEditTasks;
-
-  hideTaskRemoveCheckboxes();
 }
 
 const onLoadFunction = () => {
@@ -188,7 +194,6 @@ const editTasksBtn = document.querySelector('#edit-tasks-btn');
 const viewTasksBtn = document.querySelector('#view-tasks-btn');
 const goBackBtn = document.querySelector('#go-back-btn');
 const toggleSelectBtn = document.querySelector('#toggle-select-btn');
-const removeSelectedBtn = document.querySelector('#remove-selected-btn');
 const saveChangesBtn = document.querySelector('#save-changes-btn');
 
 // EVENT LISTENERS 
@@ -199,5 +204,4 @@ editTasksBtn.addEventListener('click', editTasks);
 viewTasksBtn.addEventListener('click', viewTasks);
 goBackBtn.addEventListener('click', goBack);
 toggleSelectBtn.addEventListener('click', toggleSelected);
-removeSelectedBtn.addEventListener('click', removeSelected);
 saveChangesBtn.addEventListener('click', saveChanges);
