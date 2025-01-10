@@ -1,1 +1,235 @@
+/* Define color variables in :root */
+:root {
+  --primary-bg-color: #f9f9f9; /* Light background for the body */
+  --primary-text-color: #333;  /* Dark text */
+  --button-bg-color: #333; /* Dark background for buttons */
+  --button-text-color: #fff; /* White text on buttons */
+  --control-box-bg-color: #222; /* Dark background for control boxes */
+  --control-box-text-color: #f9f9f9; /* Light text in control boxes */
+  --task-bg-color: #fff; /* Light background for tasks */
+  --task-border-color: #ccc; /* Light border for tasks */
+  --header-bg-color: #222; /* Dark background for header */
+  --header-text-color: #f9f9f9; /* Light text for header */
+  --highlight-bg-color: rgb(10, 175, 10); 
+  --remove-task-checkbox-color: rgb(220, 0, 0);
+  --complete-task-checkbox-color: rgb(10, 175, 10);
+  --highlight-text-color: #fff; /* Text color for highlighted tasks */
+  --button-hover-bg-color: #555; /* Darker button hover */
+  --button-active-bg-color: #444; /* Even darker active button color */
+}
 
+/* General body styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--primary-bg-color);
+  color: var(--primary-text-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Header styles */
+header {
+  background-color: var(--header-bg-color);
+  color: var(--header-text-color);
+  text-align: center;
+  padding: 20px;
+}
+
+/* Main container */
+main {
+  padding: 20px;
+}
+
+/* Date box */
+#date-box h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+#date-text {
+  font-size: 1.2rem;
+  color: var(--primary-text-color);
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.btn {
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+.btn:active {
+  background-color: var(--button-active-bg-color);
+}
+
+#control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+}
+
+
+/* Task container styles */
+.task-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#task-text-box h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Task box styles */
+.task-container > .task-item {
+  background-color: var(--task-bg-color);
+  border: 1px solid var(--task-border-color);
+  padding: 15px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-item.selected {
+  background-color: var(--highlight-bg-color);
+  color: var(--highlight-text-color);
+}
+
+.task-item .task-text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+#secondary-control-box button {
+  background-color: var(--control-box-bg-color);
+  color: var(--control-box-text-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+#secondary-control-box button:hover {
+  background-color: var(--button-hover-bg-color);
+}
+
+#secondary-control-box button:active {
+  background-color: var(--button-active-bg-color);
+}
+/* Reset the default checkbox appearance */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Task remove checkbox styles */
+.taskRemoveCheckbox {
+  border: 2px solid var(--remove-task-checkbox-color);
+}
+
+.taskRemoveCheckbox::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+.taskRemoveCheckbox:checked {
+  background-color: var(--remove-task-checkbox-color);
+  border-color: var(--remove-task-checkbox-color);
+}
+
+.taskRemoveCheckbox:checked::before {
+  background-color: white;
+}
+
+.taskRemoveCheckbox:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  border-color: rgba(255, 0, 0, 0.1);
+}
+
+.taskRemoveCheckbox:active {
+  background-color: rgba(255, 0, 0, 0.3);
+  border-color: rgba(255, 0, 0, 0.3);
+}
+
+.taskRemoveCheckbox:focus {
+  outline: 0px solid var(--complete-task-checkbox-color);
+}
+
+/* Task complete checkbox styles */
+.taskCompleteCheckbox {
+  border: 2px solid var(--complete-task-checkbox-color);
+}
+
+.taskCompleteCheckbox::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+.taskCompleteCheckbox:checked {
+  background-color: var(--complete-task-checkbox-color);
+  border-color: var(--complete-task-checkbox-color);
+}
+
+.taskCompleteCheckbox:checked::before {
+  background-color: white;
+}
+
+.taskCompleteCheckbox:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+  border-color: rgba(0, 123, 255, 0.1);
+}
+s
+.taskCompleteCheckbox:active {
+  background-color: rgba(0, 157, 0, 0.3);
+  border-color: rgba(0, 169, 20, 0.3);
+}
+
+.taskCompleteCheckbox:focus {
+  outline: 0px solid var(--complete-task-checkbox-color);
+}
