@@ -4,7 +4,7 @@ const createTaskElement = (taskText, taskCompleteCheckboxIsChecked) => {
   <input class="taskRemoveCheckbox" type="checkbox" name="taskRemoveCheckbox" hidden>
   <input class="taskCompleteCheckbox" type="checkbox" name="taskCompleteCheckbox" ${taskCompleteCheckboxIsChecked ? 'checked' : ''}>
   <span class="taskText">${taskText}</span></div>`;
-}
+};
 
 const getCurrentDate = () => {
   const date = new Date();
@@ -15,14 +15,14 @@ const updateCurrentDateText = () => {
   const date = new Date();
   const dateToday = `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`;
   document.querySelector('#date-text').innerText = dateToday;
-}
+};
 
 const checkLocalStorage = () => {
   if (!localStorage.getItem('ETMD')) {
     const initialData = { 'lastSavedDate': '', 'tasks': {} };
     localStorage.setItem('ETMD', JSON.stringify(initialData));
   }
-}
+};
 
 const hideTaskRemoveCheckboxes = () => {
   if (document.querySelectorAll('.taskRemoveCheckbox')) {
@@ -31,18 +31,18 @@ const hideTaskRemoveCheckboxes = () => {
       checkbox.hidden = true;
     });
   }
-}
+};
 
 const editTasks = () => {
   canEditTasks = true;
   secondaryControlBox.hidden = !canEditTasks;
 
   document.querySelectorAll('.taskRemoveCheckbox').forEach(checkbox => checkbox.hidden = false);
-}
+};
 
 const toggleSelected = () => {
   document.querySelectorAll('.taskRemoveCheckbox').forEach(checkbox => checkbox.checked = (checkbox.checked ? false : true));
-}
+};
 
 const updateIfTaskCompleteCheckboxChange = e => {
   if (e.target.classList.contains('taskCompleteCheckbox')) {
@@ -62,7 +62,7 @@ const updateIfTaskCompleteCheckboxChange = e => {
       localStorage.setItem('ETMD', JSON.stringify(ETMD));
     }
   }
-}
+};
 
 const viewTasks = () => {
   primaryControlBox.hidden = true;
@@ -81,7 +81,7 @@ const viewTasks = () => {
       ETMD.tasks[day].forEach(task => {
         taskCon.innerHTML += `
           <div class="view-task">
-            <span>${task.isChecked ? '&#10004;' : '&#10008;'}</span>
+            <span style="color: var(${task.isChecked ? '--complete-task-checkbox-color' : '--remove-task-checkbox-color'})">${task.isChecked ? '&#10004;' : '&#10008;'}</span>
             <span>${task.taskText}</span>
           </div>`;
       });
@@ -120,7 +120,7 @@ const goBack = () => {
   goBackBtn.hidden = true;
   taskCon.innerHTML = '';
   loadTasks();
-}
+};
 
 const addTask = () => {
   canEditTasks = false;
@@ -149,21 +149,20 @@ const removeSelected = () => {
 
   if (ETMD && ETMD.tasks && ETMD.tasks[currentDate]) {
     const tasks = ETMD.tasks[currentDate];
+    const tasksToRemove = [];
 
     document.querySelectorAll('.taskRemoveCheckbox').forEach(checkbox => {
       if (checkbox.checked) {
         const taskToRemove = checkbox.closest('.task');
-        const taskTextToRemove = taskToRemove.querySelector('.taskText').innerText;
+        const taskId = taskToRemove.dataset.taskId;
+        tasksToRemove.push(taskId);
         taskToRemove.remove();
-
-        const updatedTasks = tasks.filter(task => task.taskText !== taskTextToRemove);
-        ETMD.tasks[currentDate] = updatedTasks;
-        localStorage.setItem('ETMD', JSON.stringify(ETMD));
       }
     });
-  }
 
-  hideTaskRemoveCheckboxes();
+    ETMD.tasks[currentDate] = tasks.filter(task => !tasksToRemove.includes(task.id));
+    localStorage.setItem('ETMD', JSON.stringify(ETMD));
+  }
 };
 
 const saveChanges = () => {
@@ -171,13 +170,13 @@ const saveChanges = () => {
 
   canEditTasks = false;
   secondaryControlBox.hidden = !canEditTasks;
-}
+};
 
 const onLoadFunction = () => {
   updateCurrentDateText();
   checkLocalStorage();
   loadTasks();
-}
+};
 
 // VARIABLES
 let canEditTasks = false;
